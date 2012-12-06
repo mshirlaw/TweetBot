@@ -14,16 +14,20 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 /**
- * 
+ * This class controls access to a users twitter
+ * account and will eventually contain methods for 
+ * reading and accessing a users timeline, direct messages and @ replies as
+ * well as proving methods to allow the user to update their twitter from within
+ * the application 
  * @author mshirlaw
- *
+ * @date 6 December 2012
  */
 public class TwitterManager 
 {
 	//private instance fields
 	private Twitter twitter;
-	private final String CONSUMER_KEY = "[YOUR CONSUMER_KEY GOES HERE]";
-	private final String CONSUMER_SECRET = "[YOUR CONSUMER_SECRET GOES HERE]";	
+	private final String CONSUMER_KEY = "HERE";
+	private final String CONSUMER_SECRET = "HERE";	
 	private PrintWriter writer;
 	private BufferedReader reader;
 	
@@ -41,7 +45,9 @@ public class TwitterManager
 	}
 	
 	/**
-	 * The authorise method 
+	 * The authorise method either asks a user to allow access to 
+	 * their twitter account or loads an existing CONSUMER_KEY and CONSUMER_SECRET
+	 * pair from a file called keyFile 
 	 * @throws TwitterException
 	 * @throws IOException
 	 */
@@ -107,8 +113,10 @@ public class TwitterManager
 	}
 	
 	/**
-	 * 
-	 * @param theStatus
+	 * The tweet method accepts a string and posts this
+	 * string to the user's twitter timeline. A message is posted to the 
+	 * console to confirm that the status has been updated. 
+	 * @param theStatus The string to be posted to twitter
 	 * @throws TwitterException
 	 */
 	public void tweet(String theStatus) throws TwitterException
@@ -118,9 +126,11 @@ public class TwitterManager
 	}
 	
 	/**
-	 * 
+	 * The storeAccessToken stores a CONSUMER_KEY and CONSUMER_SECRET in a 
+	 * file so that authorisation is not required every time the user wishes
+	 * to use the app
 	 * @param l
-	 * @param accessToken
+	 * @param accessToken The token containing the users CONSUMER_KEY and CONSUMER_SECRET
 	 * @throws IOException
 	 */
 	
