@@ -2,7 +2,7 @@
 A simple twitter client using the twitter4j API.
 
 #About
-The twitter4j API is available at twitter4j.org. This repository includes the complete eclipse project as well as the required .jar libraries.
+The twitter4j API is available at http://twitter4j.org. This repository includes the complete eclipse project as well as the required .jar libraries.
 
 #Important
 Before you are able to use this client you must create an app at http://dev.twitter.com
