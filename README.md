@@ -1,11 +1,24 @@
 #TweetBot
-A simple twitter client using the twitter4j API. 
+A simple twitter client using the twitter4j API.
 
 #About
 The twitter4j API is available at twitter4j.org. This repository includes the complete eclipse project as well as the required .jar libraries.
 
 #Important
-Before you are able to use this client you must create an app at dev.twitter.com and copy your CONSUMER_KEY and CONSUMER_SECRET into the TwitterManager.java class. You will then need to authorise the application to post on your behalf. 
+Before you are able to use this client you must create an app at http://dev.twitter.com
+You must then copy the CONSUMER_KEY and CONSUMER_SECRET into appropriate variables in the TwitterManager.java class. You will then need to authorise the application to post on your behalf. 
+In oder to compile and run this application you must do the following:
+1. Create a new eclipse project called TweetBot
+2. Copy the lib folder to the TweetBot folder in your workspace
+3. Copy the java source files to the src folder in your project
+4. Right click your project > refresh
+5. Right click your project > Build Path > Configure Build Path
+6. Choose "Java Build Path"
+7. Choose "Add jars" and add the twitter4j-core-3.0.2.jar libary to your project
+8 Build and run 
 
 #Future updates
-This is a work in progress and will be updated with new features shortly. 
+This is a work in progress and will be updated with new features shortly. It is intended that in the future this will become a fully featured twitter client including:
+- the ability to access and display a user's timeline
+- the ability to read and display a user's @ replies
+- the ability to access and display a user's DMs
