@@ -5,11 +5,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.List;
+
 import javax.swing.JOptionPane;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
@@ -30,6 +33,7 @@ public class TwitterManager
 	private final String CONSUMER_SECRET = "HERE";	
 	private PrintWriter writer;
 	private BufferedReader reader;
+	private AccessToken accessToken;
 	
 	/**
 	 * Constructor creates a reader and writer object
@@ -60,7 +64,7 @@ public class TwitterManager
 		if(key != null)
 		{
 			TwitterFactory factory = new TwitterFactory();
-		    AccessToken accessToken = new AccessToken(key, reader.readLine());
+		    accessToken = new AccessToken(key, reader.readLine());
 
 		    //System.out.println(accessToken.getToken());
 		    //System.out.println(accessToken.getTokenSecret());
@@ -145,4 +149,26 @@ public class TwitterManager
 		writer.close();
 	}	
 	
+	/**
+	 * The getTimeLine method is used to access the user's timeline
+	 * Incomplete implementation. Only available for testing
+	 * @throws TwitterException 
+	 */
+	public void getTimeLine() throws TwitterException
+	{
+	    twitter = TwitterFactory.getSingleton();
+	    twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+	    twitter.setOAuthAccessToken(accessToken);
+
+	    //create a list of the statuses
+	    List<Status> statuses = twitter.getHomeTimeline();
+
+	    //display to the console for debugging
+	    System.out.println("Showing home timeline: ");
+	    
+	    for (Status status : statuses) 
+	    {
+	        System.out.println(status.getUser().getScreenName() + ":" + status.getText() +"\n");
+	    }
+	}
 }
