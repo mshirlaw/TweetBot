@@ -17,8 +17,18 @@ In oder to compile and run this application you must do the following:
 - Choose "Add jars" and add the twitter4j-core-3.0.2.jar libary to your project
 - Build and run 
 
+NB: When pushing changes to the TwitterManager class - remove CONSUMER_KEY and CONSUMER_SECRET
+
 #Future updates
 This is a work in progress and will be updated with new features shortly. It is intended that in the future this will become a fully featured twitter client including:
-- the ability to access and display a user's timeline
+- the ability to access and display a user's timeline (this is partially complete)
 - the ability to read and display a user's @ replies
 - the ability to access and display a user's DMs
+
+#To do
+- The application has a button to access the user's timeline but at the moment the timeline is only printed to stdout when this button is pressed. Need to modify the GUI so that it has a spot for the timeline to be displayed
+- Need to write a method in the TwitterManager class that can access the user's @ replies
+- Need to think about how we are going to display @ replies in the GUI and build this functionality into the TwitterView class
+- Need to write a method in the TwitterManager class that can access the user's DMs
+- Need to think about how we are going to display the user's DMs - maybe it is not a good idea for this to be displayed in the GUI unless the user clicks to a different screen. Not sure. Open to ideas. 
+- Might be a good idea to add functionality that allows the user to  search tweets or search hash tags. This is some ways off though I think. 
