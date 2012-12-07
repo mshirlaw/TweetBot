@@ -29,11 +29,12 @@ public class TwitterManager
 {
 	//private instance fields
 	private Twitter twitter;
-	private final String CONSUMER_KEY = "HERE";
-	private final String CONSUMER_SECRET = "HERE";	
+	private final String CONSUMER_KEY = "KEY_HERE";
+	private final String CONSUMER_SECRET = "KEY_HERE";	
 	private PrintWriter writer;
 	private BufferedReader reader;
 	private AccessToken accessToken;
+	private User user;
 	
 	/**
 	 * Constructor creates a reader and writer object
@@ -43,7 +44,6 @@ public class TwitterManager
 	
 	public TwitterManager() throws IOException
 	{
-		twitter = null;
 		writer = new PrintWriter(new FileWriter("keyFile",true));
 		reader = new BufferedReader(new FileReader("keyFile"));
 	}
@@ -112,8 +112,14 @@ public class TwitterManager
 				}
 			}
 			//persist to the accessToken for future reference.
-			storeAccessToken(twitter.verifyCredentials().getId() , accessToken);
+			storeAccessToken(accessToken);
 		}
+		
+		//create a reference to the authorised user
+		user = twitter.verifyCredentials();
+		
+		// print the user's screen name - for debugging
+		//System.out.println(user.getScreenName());
 	}
 	
 	/**
@@ -133,12 +139,11 @@ public class TwitterManager
 	 * The storeAccessToken stores a CONSUMER_KEY and CONSUMER_SECRET in a 
 	 * file so that authorisation is not required every time the user wishes
 	 * to use the app
-	 * @param l
 	 * @param accessToken The token containing the users CONSUMER_KEY and CONSUMER_SECRET
 	 * @throws IOException
 	 */
 	
-	private void storeAccessToken(long l, AccessToken accessToken) throws IOException
+	private void storeAccessToken(AccessToken accessToken) throws IOException
 	{
 	    //store accessToken.getToken() on line 1
 		writer.write(accessToken.getToken());
@@ -154,21 +159,22 @@ public class TwitterManager
 	 * Incomplete implementation. Only available for testing
 	 * @throws TwitterException 
 	 */
-	public void getTimeLine() throws TwitterException
-	{
-	    twitter = TwitterFactory.getSingleton();
-	    twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-	    twitter.setOAuthAccessToken(accessToken);
-
+	public List<Status> getTimeLine() throws TwitterException
+	{		
 	    //create a list of the statuses
 	    List<Status> statuses = twitter.getHomeTimeline();
 
-	    //display to the console for debugging
-	    System.out.println("Showing home timeline: ");
-	    
-	    for (Status status : statuses) 
-	    {
-	        System.out.println(status.getUser().getScreenName() + ":" + status.getText() +"\n");
-	    }
+	    return statuses;   
 	}
+
+	/**
+	 * Getter method to return a reference to an 
+	 * object which represents the current user
+	 * @return user The authroised user
+	 */
+	public User getUser() 
+	{
+		return user;
+	}
+	
 }

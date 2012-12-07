@@ -4,18 +4,19 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 
+import twitter4j.Status;
 import twitter4j.TwitterException;
 
 /**
@@ -35,8 +36,10 @@ public class TwitterView extends JFrame {
 	private JLabel label;
 	private JButton tweetButton;
 	private JButton clearButton;
+	private JButton refreshButton;
 	private TwitterManager manager;
 	private JTextArea textField;
+	private List<Status> timeline;
 
 	/**
 	 * The constructor creates a GUI which consists of a text field and two
@@ -118,11 +121,29 @@ public class TwitterView extends JFrame {
 		c.gridx = 0;
 		c.gridy = 1;
 		buttonPanel.add(clearButton, c);
+		
+		// create a refresh timeline button for testing
+		// really need to modify the GUI to support this feature
+		// this is mostly just here for testing purposes
+		refreshButton = new JButton("Refresh Timeline");
+		refreshButton.addActionListener(new ActionRefresh());
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 2;
+		buttonPanel.add(refreshButton, c);
+		
 		add(mainPanel);
 	}
 
 	// Puts actions into own classes and methods for neatness.
 	
+	/**
+	 * Action listener class to respond to events initiated when 
+	 * the user clicks the "Tweet" button 
+	 * @author mshirlaw
+	 * @author ridentbyte
+	 *
+	 */
 	public class ActionTweet implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			// Checks what text is entered that acts as required.
@@ -131,7 +152,11 @@ public class TwitterView extends JFrame {
 				if (textField.getText().equals("quit")) {
 					System.exit(0);
 				} else {
-					manager.tweet(textField.getText());
+					//avoid empty tweets
+					if(!textField.getText().equals(""))
+					{
+						manager.tweet(textField.getText());
+					}
 					textField.setText("");
 				}
 			} catch (Exception e) {
@@ -140,10 +165,41 @@ public class TwitterView extends JFrame {
 		}
 	}
 
+	/**
+	 * Action listener class to respond to events initiated when 
+	 * the user clicks the "Clear" button
+	 * @author mshirlaw
+	 * @author ridentbyte
+	 *
+	 */
 	public class ActionClear implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			// clears the text from the box.
 			textField.setText("");
 		}
 	}
+	
+	/**
+	 * Action listener class to respond to events initiated when 
+	 * the user clicks the "Refresh Timeline" button 
+	 * @author mshirlaw
+	 * @author ridentbyte
+	 *
+	 */
+	public class ActionRefresh implements ActionListener {
+		public void actionPerformed(ActionEvent ae) {
+			// currently prints the user's timeline to stdout
+			// need to think about where and how this should be displayed in the GUI
+			System.out.println("\nTimeline for @"+manager.getUser().getScreenName()+":\n");
+			try {
+				timeline = manager.getTimeLine();
+				for (Status status : timeline) {
+			        System.out.println("@"+status.getUser().getScreenName() + "\n" +status.getText()+"\n");
+			    }
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }
