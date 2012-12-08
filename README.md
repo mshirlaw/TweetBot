@@ -17,7 +17,7 @@ In oder to compile and run this application you must do the following:
 - Choose "Add jars" and add the twitter4j-core-3.0.2.jar libary to your project
 - Build and run 
 
-NB: When pushing changes to the TwitterManager class - remove CONSUMER_KEY and CONSUMER_SECRET
+NB: When pushing changes to the TwitterManager class - remove sensitive information in the CONSUMER_KEY and CONSUMER_SECRET
 
 #Future updates
 This is a work in progress and will be updated with new features shortly. It is intended that in the future this will become a fully featured twitter client including:
