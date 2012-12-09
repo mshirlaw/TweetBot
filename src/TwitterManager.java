@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import twitter4j.DirectMessage;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -170,7 +171,7 @@ public class TwitterManager
 	}
 	
 	/**
-	 * The getResponseTimeLine method is used to access the last 20
+	 * The getAtTimeLine method is used to access the last 20
 	 * mentions for the authenticating user
 	 * @throws TwitterException 
 	 */
@@ -182,7 +183,22 @@ public class TwitterManager
 	    return mentions;   
 	}	
 	
+	/**
+	 * The getMessages method is used to access the last 20
+	 * mentions for the authenticating user
+	 * @throws TwitterException 
+	 */
+	public ResponseList<DirectMessage> getMessages() throws TwitterException
+	{		
+	    //create a list of the direct messages
+	    ResponseList<DirectMessage> messages = twitter.getDirectMessages();
 
+	    return messages;   
+	}	
+
+	
+	
+	
 	/**
 	 * Getter method to return a reference to an 
 	 * object which represents the current user

@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 
+import twitter4j.DirectMessage;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.TwitterException;
@@ -40,11 +41,13 @@ public class TwitterView extends JFrame {
 	private JButton clearButton;
 	private JButton refreshButton;
 	private JButton repliesButton;
-	
+	private JButton messagesButton;
+
 	private TwitterManager manager;
 	private JTextArea textField;
 	private List<Status> timeline;
 	private ResponseList<Status> atTimeline;
+	private ResponseList<DirectMessage> messagesTimeline;
 
 	/**
 	 * The constructor creates a GUI which consists of a text field and two
@@ -147,6 +150,17 @@ public class TwitterView extends JFrame {
 		c.gridy = 3;
 		buttonPanel.add(repliesButton, c);
 		
+		// create a "get direct messages" button for testing
+		// really need to modify the GUI to support this feature
+		// this is mostly just here for testing purposes
+		messagesButton = new JButton("Get Direct Messages");
+		messagesButton.addActionListener(new ActionMessages());
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 4;
+		buttonPanel.add(messagesButton, c);
+
+		
 		add(mainPanel);
 	}
 
@@ -241,4 +255,30 @@ public class TwitterView extends JFrame {
 		}
 	}
 
+	/**
+	 * Action listener class to respond to events initiated when 
+	 * the user clicks the "Get Direct Messages" button 
+	 * @author mshirlaw
+	 * @author ridentbyte
+	 *
+	 */
+	private class ActionMessages implements ActionListener {
+
+		public void actionPerformed(ActionEvent ae) {
+			// currently prints the user's Direct Messages to stdout
+			// needs to be displayed in the GUI eventually
+			System.out.println("\nDirect Messages for @"+manager.getUser().getScreenName()+":\n");
+			try {
+				messagesTimeline = manager.getMessages();
+				for (DirectMessage message : messagesTimeline) {
+			        System.out.println("@"+message.getSender().getScreenName() + "\n" +message.getText()+"\n");
+			    }
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	
 }
