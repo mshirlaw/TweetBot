@@ -8,6 +8,8 @@ import java.net.URI;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -29,8 +31,8 @@ public class TwitterManager
 {
 	//private instance fields
 	private Twitter twitter;
-	private final String CONSUMER_KEY = "KEY_HERE";
-	private final String CONSUMER_SECRET = "KEY_HERE";	
+	private final String CONSUMER_KEY = "HERE";
+	private final String CONSUMER_SECRET = "HERE";	
 	private PrintWriter writer;
 	private BufferedReader reader;
 	private AccessToken accessToken;
@@ -166,6 +168,20 @@ public class TwitterManager
 
 	    return statuses;   
 	}
+	
+	/**
+	 * The getResponseTimeLine method is used to access the last 20
+	 * mentions for the authenticating user
+	 * @throws TwitterException 
+	 */
+	public ResponseList<Status> getAtTimeLine() throws TwitterException
+	{		
+	    //create a list of the mentions
+	    ResponseList<Status> mentions = twitter.getMentionsTimeline();
+
+	    return mentions;   
+	}	
+	
 
 	/**
 	 * Getter method to return a reference to an 

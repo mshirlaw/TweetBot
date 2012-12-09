@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 
+import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -34,12 +35,16 @@ public class TwitterView extends JFrame {
 	private JPanel mainPanel;
 	private JPanel buttonPanel;
 	private JLabel label;
+	
 	private JButton tweetButton;
 	private JButton clearButton;
 	private JButton refreshButton;
+	private JButton repliesButton;
+	
 	private TwitterManager manager;
 	private JTextArea textField;
 	private List<Status> timeline;
+	private ResponseList<Status> atTimeline;
 
 	/**
 	 * The constructor creates a GUI which consists of a text field and two
@@ -132,6 +137,16 @@ public class TwitterView extends JFrame {
 		c.gridy = 2;
 		buttonPanel.add(refreshButton, c);
 		
+		// create a "get @replies" button for testing
+		// really need to modify the GUI to support this feature
+		// this is mostly just here for testing purposes
+		repliesButton = new JButton("Get @replies");
+		repliesButton.addActionListener(new ActionReplies());
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		buttonPanel.add(repliesButton, c);
+		
 		add(mainPanel);
 	}
 
@@ -144,7 +159,7 @@ public class TwitterView extends JFrame {
 	 * @author ridentbyte
 	 *
 	 */
-	public class ActionTweet implements ActionListener {
+	private class ActionTweet implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			// Checks what text is entered that acts as required.
 			
@@ -172,7 +187,7 @@ public class TwitterView extends JFrame {
 	 * @author ridentbyte
 	 *
 	 */
-	public class ActionClear implements ActionListener {
+	private class ActionClear implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			// clears the text from the box.
 			textField.setText("");
@@ -186,7 +201,7 @@ public class TwitterView extends JFrame {
 	 * @author ridentbyte
 	 *
 	 */
-	public class ActionRefresh implements ActionListener {
+	private class ActionRefresh implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			// currently prints the user's timeline to stdout
 			// need to think about where and how this should be displayed in the GUI
@@ -194,6 +209,30 @@ public class TwitterView extends JFrame {
 			try {
 				timeline = manager.getTimeLine();
 				for (Status status : timeline) {
+			        System.out.println("@"+status.getUser().getScreenName() + "\n" +status.getText()+"\n");
+			    }
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Action listener class to respond to events initiated when 
+	 * the user clicks the "Get @replies" button 
+	 * @author mshirlaw
+	 * @author ridentbyte
+	 *
+	 */
+	private class ActionReplies implements ActionListener {
+
+		public void actionPerformed(ActionEvent ae) {
+			// currently prints the user's @replies to stdout
+			// needs to be displayed in the GUI eventually
+			System.out.println("\n@replies Timeline for @"+manager.getUser().getScreenName()+":\n");
+			try {
+				atTimeline = manager.getAtTimeLine();
+				for (Status status : atTimeline) {
 			        System.out.println("@"+status.getUser().getScreenName() + "\n" +status.getText()+"\n");
 			    }
 			} catch (TwitterException e) {
