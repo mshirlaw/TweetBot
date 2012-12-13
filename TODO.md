@@ -3,5 +3,6 @@
 - Need to write a method in the TwitterManager class that can access the user's @ replies (COMPLETE)
 - Need to think about how we are going to display @ replies in the GUI and build this functionality into the TwitterView class
 - Need to write a method in the TwitterManager class that can access the user's DMs (COMPLETE)
+- Write a method to send a direct message to a given user (PARTIALLY COMPLETE)
 - Need to think about how we are going to display the user's DMs - maybe it is not a good idea for this to be displayed in the GUI unless the user clicks to a different screen. Not sure. Open to ideas. 
 - Might be a good idea to add functionality that allows the user to  search tweets or search hash tags. Some ways off though I think. 
