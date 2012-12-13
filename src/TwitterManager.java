@@ -26,7 +26,7 @@ import twitter4j.auth.RequestToken;
  * well as proving methods to allow the user to update their twitter from within
  * the application 
  * @author mshirlaw
- * @date 6 December 2012
+ * @date 13 December 2012
  */
 public class TwitterManager 
 {
@@ -173,12 +173,23 @@ public class TwitterManager
 	/**
 	 * The getAtTimeLine method is used to access the last 20
 	 * mentions for the authenticating user
+	 * @return mentions
 	 * @throws TwitterException 
 	 */
 	public ResponseList<Status> getAtTimeLine() throws TwitterException
 	{		
+		ResponseList<Status> mentions = null;
+		
 	    //create a list of the mentions
-	    ResponseList<Status> mentions = twitter.getMentionsTimeline();
+	    try
+	    {
+	    	mentions = twitter.getMentionsTimeline();
+	    }
+	    catch(TwitterException te)
+	    {
+	    	System.out.println("Failed to get the list of replies");
+			te.printStackTrace();
+	    }
 
 	    return mentions;   
 	}	
@@ -186,27 +197,61 @@ public class TwitterManager
 	/**
 	 * The getMessages method is used to access the last 20
 	 * mentions for the authenticating user
+	 * @return messages
 	 * @throws TwitterException 
 	 */
 	public ResponseList<DirectMessage> getMessages() throws TwitterException
 	{		
-	    //create a list of the direct messages
-	    ResponseList<DirectMessage> messages = twitter.getDirectMessages();
+		ResponseList<DirectMessage> messages = null;
+	    
+		//create a list of the direct messages
+	    try
+	    {
+	    	messages = twitter.getDirectMessages();
+	    }
+	    catch(TwitterException te)
+	    {
+	    	System.out.println("Failed to get the list of direct messages");
+			te.printStackTrace();
+	    }
 
 	    return messages;   
 	}	
 
-	
-	
-	
 	/**
 	 * Getter method to return a reference to an 
 	 * object which represents the current user
-	 * @return user The authroised user
+	 * @return user The authenticated user
 	 */
 	public User getUser() 
 	{
 		return user;
 	}
 	
+	
+	/**
+	 * The sendMessage method is used to send a direct message to a user
+	 * who is identified by a specific screen name
+	 * @param screenName The screen name of the receiver of the direct message
+	 * @param text The message to be sent or null if the message failed to be sent
+	 * @return The direct message which was sent to the user or 
+	 * @throws TwitterException
+	 */
+	public DirectMessage sendMessage(String screenName, String theMessage) throws TwitterException
+	{
+		DirectMessage dm = null;
+		
+		//call the API sendDirectMessage method
+		try
+		{
+			dm = twitter.sendDirectMessage(screenName, theMessage);
+		}
+		catch(TwitterException te)
+		{
+            System.out.println("Failed to send a direct message: " + te.getMessage());
+			te.printStackTrace();
+		}
+		
+		return dm; 	
+	}
 }

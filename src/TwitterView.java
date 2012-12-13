@@ -160,7 +160,6 @@ public class TwitterView extends JFrame {
 		c.gridy = 4;
 		buttonPanel.add(messagesButton, c);
 
-		
 		add(mainPanel);
 	}
 
