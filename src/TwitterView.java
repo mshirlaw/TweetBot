@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -43,8 +45,14 @@ public class TwitterView extends JFrame {
 	private JButton repliesButton;
 	private JButton messagesButton;
 
+	//size of text area
+	private final int COLS = 20;
+	private final int ROWS = 25;
+	private final int TEXT_WIDTH = 300;
+	private final int TEXT_HEIGHT = 500;
+	
 	private TwitterManager manager;
-	private JTextArea textField;
+	private JTextArea textArea;
 	private List<Status> timeline;
 	private ResponseList<Status> atTimeline;
 	private ResponseList<DirectMessage> messagesTimeline;
@@ -92,44 +100,36 @@ public class TwitterView extends JFrame {
 		mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		// create a label so that the user knows how to use the app
-		label = new JLabel("Enter a tweet or type \"quit\" to exit: ",
+		label = new JLabel("Welcome to TweetBot",
 				JLabel.CENTER);
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 0;
 		mainPanel.add(label, c);
 
 		// text area for user to enter tweet
-		textField = new JTextArea(7, 10);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
+		textArea = new JTextArea(ROWS, COLS);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+
+		JScrollPane scrollPane = new JScrollPane(textArea); 
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
+		
+		c.fill = GridBagConstraints.VERTICAL;
+		c.gridx = 1;
 		c.gridy = 1;
-		mainPanel.add(textField, c);
+		mainPanel.add(scrollPane, c);
 
 		// area to hold buttons
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 2;
-		mainPanel.add(buttonPanel, c);
-
-		// create the tweet button
-		tweetButton = new JButton("Send Tweet");
-		tweetButton.addActionListener(new ActionTweet());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		buttonPanel.add(tweetButton, c);
-
-		// create the clear button
-		clearButton = new JButton("Clear");
-		clearButton.addActionListener(new ActionClear());
-		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.PAGE_END;
 		c.gridx = 0;
 		c.gridy = 1;
-		buttonPanel.add(clearButton, c);
-		
+		mainPanel.add(buttonPanel, c);
+
 		// create a refresh timeline button for testing
 		// really need to modify the GUI to support this feature
 		// this is mostly just here for testing purposes
@@ -137,7 +137,7 @@ public class TwitterView extends JFrame {
 		refreshButton.addActionListener(new ActionRefresh());
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 0;
 		buttonPanel.add(refreshButton, c);
 		
 		// create a "get @replies" button for testing
@@ -147,7 +147,7 @@ public class TwitterView extends JFrame {
 		repliesButton.addActionListener(new ActionReplies());
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 1;
 		buttonPanel.add(repliesButton, c);
 		
 		// create a "get direct messages" button for testing
@@ -157,9 +157,26 @@ public class TwitterView extends JFrame {
 		messagesButton.addActionListener(new ActionMessages());
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 2;
 		buttonPanel.add(messagesButton, c);
 
+		// create the clear button
+		clearButton = new JButton("Clear");
+		clearButton.addActionListener(new ActionClear());
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		buttonPanel.add(clearButton, c);
+				
+		// create the tweet button
+		tweetButton = new JButton("Send Tweet");
+		tweetButton.addActionListener(new ActionTweet());
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 4;
+		buttonPanel.add(tweetButton, c);
+		
+		
 		add(mainPanel);
 	}
 
@@ -177,15 +194,15 @@ public class TwitterView extends JFrame {
 			// Checks what text is entered that acts as required.
 			
 			try {
-				if (textField.getText().equals("quit")) {
+				if (textArea.getText().equals("quit")) {
 					System.exit(0);
 				} else {
 					//avoid empty tweets
-					if(!textField.getText().equals(""))
+					if(!textArea.getText().equals(""))
 					{
-						manager.tweet(textField.getText());
+						manager.tweet(textArea.getText());
 					}
-					textField.setText("");
+					textArea.setText("");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -203,7 +220,7 @@ public class TwitterView extends JFrame {
 	private class ActionClear implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			// clears the text from the box.
-			textField.setText("");
+			textArea.setText("");
 		}
 	}
 	
@@ -222,7 +239,10 @@ public class TwitterView extends JFrame {
 			try {
 				timeline = manager.getTimeLine();
 				for (Status status : timeline) {
-			        System.out.println("@"+status.getUser().getScreenName() + "\n" +status.getText()+"\n");
+			    	//System.out.println("@"+status.getUser().getScreenName() + "\n" +status.getText()+"\n");
+					textArea.append("@"+status.getUser().getScreenName() + "\n" +status.getText()+"\n");
+					textArea.append("\n");
+					
 			    }
 			} catch (TwitterException e) {
 				e.printStackTrace();

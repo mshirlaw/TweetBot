@@ -228,7 +228,6 @@ public class TwitterManager
 		return user;
 	}
 	
-	
 	/**
 	 * The sendMessage method is used to send a direct message to a user
 	 * who is identified by a specific screen name
