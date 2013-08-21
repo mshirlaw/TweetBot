@@ -21,9 +21,9 @@ NB: When pushing changes to the TwitterManager class - remove sensitive informat
 
 #Future updates
 This is a work in progress and will be updated with new features shortly. It is intended that in the future this will become a fully featured twitter client including:
-- the ability to access and display a user's timeline (this is partially complete)
+- the ability to access and display a user's timeline 
 - the ability to read and display a user's @ replies
 - the ability to access and display a user's DMs
 
 #Known bugs
-- The text in the main JTextArea does not wrap. Once the user types enough characters, the GUI is distorted. Need to wrap text.
+- 
