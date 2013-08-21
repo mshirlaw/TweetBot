@@ -165,7 +165,24 @@ public class TwitterView extends JFrame {
 
 		// create the tweet button
 		tweetButton = new JButton("Send Tweet");
-		tweetButton.addActionListener(new ActionTweet());
+		tweetButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				try 
+				{
+					openTweetWindow();
+				}
+				catch (IOException e1) 
+				{
+					e1.printStackTrace();
+				} 
+				catch (TwitterException e1) 
+				{
+					e1.printStackTrace();
+				}
+			}
+		});
 		buttonPanel.add(tweetButton);
 				
 		// create the clear button
@@ -238,35 +255,22 @@ public class TwitterView extends JFrame {
 		messages.setCaretPosition(0);
 		scrollPaneMessages.getVerticalScrollBar().setValue(0);
 	}
-		
-	/**
-	 * Action listener class to respond to events initiated when 
-	 * the user clicks a "Tweet" button 
-	 * @author mshirlaw
-	 * @author ridentbyte
-	 *
-	 */
 	
-	//This needs to be re-worked to open a new window for the tweet text
-	private class ActionTweet implements ActionListener {
-		public void actionPerformed(ActionEvent ae) {			
-			try {
-				if (home.getText().equals("quit")) {
-					System.exit(0);
-				} else {
-					//avoid empty tweets
-					if(!home.getText().equals(""))
-					{
-						manager.tweet(home.getText());
-					}
-					home.setText("");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+	//open the tweet window
+	private void openTweetWindow() throws IOException, TwitterException
+	{
+		TwitterTweetView ttv = new TwitterTweetView();
+		ttv.setVisible(true);
+		ttv.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		ttv.setTitle("Tweet");			
+		
+		ttv.setLocationRelativeTo(this);
+		ttv.setLocation(TEXT_WIDTH, 0);
+		//set resize to false
+		ttv.setResizable(false);
 	}
 
+	
 	/**
 	 * Action listener class to respond to events initiated when 
 	 * the user clicks the "Clear" button
@@ -360,5 +364,5 @@ public class TwitterView extends JFrame {
 				e.printStackTrace();
 			}
 		}
-	}
+	}	
 }
